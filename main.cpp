@@ -5,10 +5,12 @@
 #include <vector>
 #include <QFile>
 #include <QTextStream>
-int main(int argc, char *argv[])
-{
-    QCoreApplication a(argc, argv);
+#include<QTime>
+#include "LocationTest.h"
+#include "TireTree.h"
 
+void testGeohash()
+{
     CGeoHash g;
     std::string  s=g.Encode(30,120,5);
     GeoCoord coord= g.Decode(s);
@@ -25,7 +27,10 @@ int main(int argc, char *argv[])
     rect.east=123;
     rect.south=22;
     std::vector<std::string> hashes;
+    QTime time;
+    time.start();
     g.GetRectGeoHashes(rect,hashes,4);
+    int timeElapsed = time.elapsed();
     QFile f("/home/sun/location.csv");
     f.open(QIODevice::WriteOnly);
     QTextStream out(&f);
@@ -35,6 +40,20 @@ int main(int argc, char *argv[])
         out<<QString("%1,%2,%3,%4\n").arg(coord.north).arg(coord.west).arg(coord.south).arg(coord.east);
     }
     f.close();
+}
+int main(int argc, char *argv[])
+{
+    QCoreApplication a(argc, argv);
+    //LocationTest l;
+    //l.findRect(26,119,123,22);
+
+    //l.findRect1(26,119,123,22);
+    TireTree<int> tt;
+    tt.add("123",2);
+    tt.add("12",1);
+
+    std::vector<int> v;
+    tt.get("12",v,false);
 
     return a.exec();
     //,

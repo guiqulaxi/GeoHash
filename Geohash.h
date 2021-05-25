@@ -176,6 +176,7 @@ public:
     GeoBoxDimension GeohashDimensionsForPrecision(int precision);
      //获得指定矩形中的Geohash precision最大精度
     void GetRectGeoHashes(const GeoRect geoRect,std::vector<std::string>& hashes,int precision);
+    void GetRectGeoHashes1(const GeoRect geoRect,std::vector<std::string>& hashes,int precision);
 
 private:
     void Init(int nPrecision);

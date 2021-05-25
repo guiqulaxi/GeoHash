@@ -294,3 +294,33 @@ void CGeoHash::GetRectGeoHashes(const GeoRect geoRect,std::vector<std::string>& 
     }
 
 }
+
+void CGeoHash::GetRectGeoHashes1(const GeoRect geoRect,std::vector<std::string>& hashes,int precision)
+{
+    GeoCoord coord=GetGeoRect(geoRect.south,geoRect.west,precision);
+    GeoRect rect;
+    rect.north =coord.north;
+    rect.east=coord.east;
+    rect.south=coord.south;
+    rect.west=coord.west;
+    double steplng=rect.east- rect.west;
+    double steplat=rect.north- rect.south;
+    std::string geohash=Encode(coord.latitude,coord.longitude,precision);
+    std::string prevWestSouthGeohash=geohash;
+   for(rect.east=coord.east, rect.west=coord.west;rect.east<=geoRect.east;rect.east+=steplng,rect.west+=steplng)
+   {
+        std::string prevSouthGeohash=prevWestSouthGeohash;
+
+        for(rect.north =coord.north, rect.south=coord.south;rect.north<=geoRect.north;rect.north+=steplat,rect.south+=steplat)
+        {
+            std::string hash=GetNeighbor(prevSouthGeohash,NORTH);
+            hashes.push_back(hash);
+            prevSouthGeohash=hash;
+        }
+
+        prevWestSouthGeohash=GetNeighbor(prevWestSouthGeohash,EAST);
+    }
+
+
+
+}
