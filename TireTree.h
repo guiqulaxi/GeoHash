@@ -5,41 +5,64 @@
 #include <string>
 #include <vector>
 #include <stack>
+static std::unordered_map<char,int> base32index={
+
+    {'0',0},{'1',1},{'2',2},{'3',3},{'4',4},{'5',5},{'6',6},{'7',7},
+    {'8',8},{'9',9},{'b',10},{'c',11},{'d',12},{'e',13},{'f',14},{'g',15},
+    {'h',16},{'j',17},{'k',18},{'m',19},{'n',20},{'p',21},{'q',22},{'r',23},
+    {'s',24},{'t',25},{'u',26},{'v',27},{'w',28},{'x',29},{'y',30},{'z',31},
+};
 template<typename T>
 class TireeTreeNode
 {
 public:
 
 
-    TireeTreeNode()  :  leaf(false)  {
-
+    TireeTreeNode()  :  leaf(false)  { 
+       for(int i=0;i<32;i++)
+       {
+         _childs[i]=nullptr;
+       }
     }
 
     ~TireeTreeNode()  {
-        for(auto kv:_childs)  {
-            delete kv.second ;
+        for(int i=0;i<32;i++)
+        {
+            if(_childs[i])
+            {
+                delete _childs[i] ;
+                _childs[i]=nullptr;
+            }
+
         }
-        _childs.clear();
+
     }
 
     TireeTreeNode*  insert(char c) {
 
 
-        if  (_childs.find(c)==_childs.end()) {
-
-            _childs[c] = new TireeTreeNode();
+        if  (base32index.find(c)!=base32index.end()) {
+            int index=base32index[c];
+            if(!_childs[index])
+                _childs[index] = new TireeTreeNode();
+            return _childs[index];
         }
-        return _childs[c];
+        else
+        {
+            return nullptr;
+        }
+
     }
 
     TireeTreeNode* get(char c) {
-        if  (_childs.find(c)!=_childs.end()) {
 
-            return _childs[c] ;
+        if  (base32index.find(c)!=base32index.end()) {
+
+            return _childs[base32index[c]] ;
         }
         return nullptr;
     }
-    const std::unordered_map<char,TireeTreeNode*>&getchild()const{
+     TireeTreeNode**getchild(){
 
         return _childs ;
     }
@@ -52,7 +75,8 @@ public:
 
 
 private:
-    std::unordered_map<char,TireeTreeNode*> _childs;
+    //std::unordered_map<char,TireeTreeNode*> _childs;
+    TireeTreeNode* _childs[32];
     bool leaf;
     std::vector<T> value;
 };
@@ -80,7 +104,7 @@ public:
         TireeTreeNode<T>* node = &root;
         for (int i =0;  i < n; i++) {
             node = node->get(word[i]);
-            if(node)
+            if(!node)
                 break;
         }
         if(onlyLeaf)
@@ -101,8 +125,14 @@ public:
                     nodes.pop();
                     const std::vector<T>& v=node->getValue();
                     value.insert(value.end(),v.begin(),v.end());
-                    for(auto kv:node->getchild())  {
-                        nodes.push(kv.second);
+                    TireeTreeNode<T> ** _childs=node->getchild();
+                    for(int i=0;i<32;i++)  {
+
+                        if(_childs[i])
+                        {
+                           nodes.push(_childs[i]);
+                        }
+
                     }
 
                 }
