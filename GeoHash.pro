@@ -18,6 +18,7 @@ SOURCES += \
         Geohash.cpp \
         LocationTest.cpp \
         TireTree.cpp \
+        Util.cpp \
         main.cpp
 
 # Default rules for deployment.
@@ -28,4 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Geohash.h \
     LocationTest.h \
-    TireTree.h
+    TireTree.h \
+    Util.h

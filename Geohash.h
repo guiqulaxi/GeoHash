@@ -181,16 +181,11 @@ public:
 private:
     void Init(int nPrecision);
     //获得Geohash的经度或者纬度二进制pData，返回经度或者纬度的范围
-
-
     double Deg2Rad(double ang);
     double Rad2Deg(double ang);
     int IndexForChar(char c, const std::string & str);
 
 private:
-
-
-
     std::map<int,GeoError> m_mapError;
 
 

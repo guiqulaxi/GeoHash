@@ -115,7 +115,7 @@ void  LocationTest::findRect(double north ,double west,double east,double south)
            querySql.append(cond);
          }
      }
-     qDebug()<<querySql;
+     //qDebug()<<querySql;
       QSqlQuery query(database);
      query.exec(querySql);
      database.close();

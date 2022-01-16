@@ -263,25 +263,25 @@ void CGeoHash::GetRectGeoHashes(const GeoRect geoRect,std::vector<std::string>& 
               westrect.south=rect.south;
               westrect.west=geoRect.west;
               GetRectGeoHashes(westrect,hashes,precision);
-              qDebug()<<westrect.toString().c_str();
+
               southrect.north=rect.south;
               southrect.east=rect.east;
               southrect.south=geoRect.south;
               southrect.west=geoRect.west;
               GetRectGeoHashes(southrect,hashes,precision);
-              qDebug()<<southrect.toString().c_str();
+
               eastrect.north=rect.north;
               eastrect.east=geoRect.east;
               eastrect.south=geoRect.south;
               eastrect.west=rect.east;
                GetRectGeoHashes(eastrect,hashes,precision);
-              qDebug()<<eastrect.toString().c_str();
+
               northrect.north=geoRect.north;
               northrect.east=geoRect.east;
               northrect.south=rect.north;
               northrect.west=rect.west;
               GetRectGeoHashes(northrect,hashes,precision);
-              qDebug()<<northrect.toString().c_str();
+
               isContained=true;
                break;
          }

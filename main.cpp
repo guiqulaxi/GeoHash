@@ -19,7 +19,7 @@ void testGeohash()
     for(int i=0;i<50;i+=5)
     {
         GeoCoord  rect=g.GetGeoRect(30,120,5);
-        qDebug()<<(rect.latitude-rect.north);
+        //qDebug()<<(rect.latitude-rect.north);
     }
     GeoRect rect;
     rect.north=26;
@@ -41,69 +41,48 @@ void testGeohash()
     }
     f.close();
 }
-
-
-
+void fun(TrieTree<std::string>& tree,const std::string& key,int num)
+{
+   if(num==0)
+   {
+       tree.insert(key,key);
+       return;
+   }
+   for(char i='a';i<='z';i++)
+   {
+      fun(tree,key+i,num-1);
+   }
+}
 void testTireTree()
 {
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime())+ qrand());
-    CGeoHash g;
-    TireTree<std::string> tt;
-    std::vector<std::string> data;
-    for(int i=0;i<100000;i++)
-    {
-        double lat=-90+qrand()/(double)(RAND_MAX/(180));
-        double lng=-180+qrand()/(double)(RAND_MAX/(360));;
-        std::string&& str=g.Encode(lat,lng,9);
-        data.emplace_back(str);
-    }
-
-    std::string suf=data[0];
-    {
-        QTime time;
-        time.start();
-        for(size_t i=0;i<data.size();i++)
-        {
-            tt.add(data[i],data[i]);
-        }
-        for(int re=0;re<1000;re++)
-        {
-        std::vector<std::string> v;
-        tt.get(suf,v,false);
-        }
-        qDebug()<<time.elapsed()/1000.0<<"s";
-    }
-
-    {
-        QTime time;
-        time.start();
-
-        for(int re=0;re<1000;re++)
-        {
-            std::vector<std::string> v;
-            for(size_t i=0;i<data.size();i++)
-            {
-                if(data[i].find(suf.c_str(),0,suf.size())!=std::string::npos)
-                {
-                    v.push_back(data[i]);
-                }
-            }
-        }
-
-        qDebug()<<time.elapsed()/1000.0<<"s";
-    }
-
-
+   TrieTree<std::string> tree;
+   fun(tree,"",4);
+   //tree.remove("aba");
+   std::unordered_map<std::string,std::string> values;
+   std::string v;
+   tree.prefix("a",values);
+   int a=0;
 }
+
+
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-    //LocationTest l;
-    //l.findRect(26,119,123,22);
+    //QCoreApplication a(argc, argv);
+//    LocationTest l;
+//    {
+//        QTime time;
+//        time.start();
+//        l.findRect(26,119,123,22);
+//        qDebug()<<time.elapsed()/1000.0<<"s";
+//    }
+//    {
+//        QTime time;
+//        time.start();
+//        l.findRect1(26,119,123,22);
+//        qDebug()<<time.elapsed()/1000.0<<"s";
+//    }
+     testTireTree();
 
-    //l.findRect1(26,119,123,22);
-    testTireTree();
-
-    return a.exec();
+   // return a.exec();
     //,
 }
